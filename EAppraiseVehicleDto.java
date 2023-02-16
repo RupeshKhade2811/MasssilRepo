@@ -1,8 +1,6 @@
 package com.factory.appraisal.vehiclesearchapp.persistence.dto;
+//@author:Rupesh Khade
 
-import com.factory.appraisal.vehiclesearchapp.persistence.model.EAppraisalVehicleAcCondition;
-import com.factory.appraisal.vehiclesearchapp.persistence.model.EDealerReg;
-import com.factory.appraisal.vehiclesearchapp.persistence.model.EUserReg;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +14,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EAppraiseVehicleDto extends TransactionEntityDto {
+public class AppraiseVehicle extends TransactionEntity {
 
     @NotNull
     private Long appraisalReferenceId;
@@ -79,11 +77,10 @@ public class EAppraiseVehicleDto extends TransactionEntityDto {
     private Long year;
     @Max(20)
     private String vinNumber ;
+    private DealerRegistration dealerId;
+    private UserRegistration userId;
+    private AppraisalTestDrivingStatus appraisalTestDrivingStatus;
 
-    private EDealerReg dealerId;
 
-
-    private EUserReg userId;
-    private EAppraisalVehicleAcCondition acCondnId;
 
 }
