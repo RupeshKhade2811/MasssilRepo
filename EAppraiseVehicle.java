@@ -1,5 +1,5 @@
 package com.factory.appraisal.vehiclesearchapp.persistence.model;
-
+//@author:Rupesh Khade
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
@@ -17,8 +18,9 @@ import java.util.Date;
 
 
 @Audited
+@AuditTable(value = "APPRAISAL_VEHICLE_AUD", schema = "FACTORY_AUD")
 @Entity
-@Table(name = "APPRAISAL_VEHICLE")
+@Table(name = "APPRAISAL_VEHICLE",schema = "FACTORY_DB")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -27,9 +29,14 @@ import java.util.Date;
 @DynamicInsert
 @AttributeOverride(name = "appraisalReferenceId", column = @Column(name = "APPR_REF_ID"))
 @AttributeOverride(name = "valid", column = @Column(name = "IS_ACTIVE"))
+@AttributeOverride(name="createdBy",column =@Column(name = "CREATED_BY"))
+@AttributeOverride(name="createdOn",column =@Column(name = "CREATED_ON"))
+@AttributeOverride(name=" modifiedBy",column =@Column(name = "MODIFIED_BY"))
+@AttributeOverride(name="modifiedOn",column =@Column(name = "MODIFIED_ON"))
 public class EAppraiseVehicle extends TransactionEntity{
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="appr_veh_seq")
+    @SequenceGenerator(name="appr_veh_seq", sequenceName="APPR_VEH_SEQ")
     @Column(name="APPR_REF_ID")
     private Long appraisalReferenceId;
 
@@ -90,19 +97,20 @@ public class EAppraiseVehicle extends TransactionEntity{
     @Column(name="VIN_NUMBER ")
     private String vinNumber ;
     @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-    @OneToOne(targetEntity = EDealerReg.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "DEALER_ID", nullable = false)
+    @OneToOne(targetEntity = EDealerReg.class, fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "DEALER_ID",referencedColumnName = "dealerId",nullable = false)
     private EDealerReg dealerId;
 
     @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-    @OneToOne(targetEntity = EUserReg.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID", nullable = false)
+    @OneToOne(targetEntity = EUserReg.class, fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "USER_ID",referencedColumnName = "userId",nullable = false)
     private EUserReg userId;
 
     @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-    @OneToOne(targetEntity = EAppraisalVehicleAcCondition.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "AC_CONDN_ID",referencedColumnName = "AC_CONDN_ID")
-    private EAppraisalVehicleAcCondition acCondnId;
+    @OneToOne(mappedBy = "appraisalRef")
+    private EAppraisalTestDrivingStatus appraisalTestDrivingStatus;
+
+
 
 
 
