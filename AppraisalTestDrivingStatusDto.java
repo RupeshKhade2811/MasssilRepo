@@ -1,6 +1,7 @@
 package com.factory.appraisal.vehiclesearchapp.persistence.dto;
+//@author:Rupesh khade
 
-import com.factory.appraisal.vehiclesearchapp.persistence.model.EAppraiseVehicle;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,11 +14,13 @@ import javax.validation.constraints.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AppraisalTestDrivingStatusDto extends TransactionEntityDto {
+public class AppraisalTestDrivingStatus extends TransactionEntity {
 
     private Long vehicleDivingStatusId;
+    private AppraiseVehicle appraisalRef;
 
-    private EAppraiseVehicle appraisalRef;
+    private AppraisalVehicleAcCondition appraisalVehicleAcCondition;
+
     @Max(50)
     private String optionalEquipment;
     @Max(4)
