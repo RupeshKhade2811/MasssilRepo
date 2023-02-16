@@ -1,4 +1,5 @@
 package com.factory.appraisal.vehiclesearchapp.persistence.model;
+//@author:Rupesh Khade
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,12 +7,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.envers.AuditTable;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import javax.persistence.*;
 @Audited
+@AuditTable(value = "APR_TEST_DR_STATUS_AUD", schema = "FACTORY_AUD")
 @Entity
-@Table(name = "APR_TEST_DR_STATUS")
+@Table(name = "APR_TEST_DR_STATUS",schema = "FACTORY_DB")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,20 +24,26 @@ import javax.persistence.*;
 @DynamicInsert
 @AttributeOverride(name = "vehicleDivingStatusId", column = @Column(name = "VEH_STATUS_ID "))
 @AttributeOverride(name = "valid", column = @Column(name = "IS_ACTIVE"))
+@AttributeOverride(name="createdBy",column =@Column(name = "CREATED_BY"))
+@AttributeOverride(name="createdOn",column =@Column(name = "CREATED_ON"))
+@AttributeOverride(name=" modifiedBy",column =@Column(name = "MODIFIED_BY"))
+@AttributeOverride(name="modifiedOn",column =@Column(name = "MODIFIED_ON"))
 
 public class EAppraisalTestDrivingStatus extends TransactionEntity{
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="apr_test_dr_status_seq")
+    @SequenceGenerator(name="apr_test_dr_status_seq", sequenceName="APR_TEST_DR_STATUS_SEQ")
     @Column(name = "VEH_STATUS_ID")
     private Long vehicleDivingStatusId;
+
+    @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     @OneToOne(targetEntity = EAppraiseVehicle.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "APPRAISAL_REF ",referencedColumnName = "APPR_REF_ID")
+    @JoinColumn(name = "APPRAISAL_REF ",referencedColumnName = "APPR_REF_ID",nullable = false)
     private EAppraiseVehicle appraisalRef;
 
-    @OneToOne
-    @JoinColumn(name = "")
-    private EAppraisalVehicleAcCondition acConditionId;
-
+    @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+    @OneToOne(mappedBy = "vehicleStatusId")
+    private EAppraisalVehicleAcCondition eAppraisalVehicleAcCondition;
 
     @Column(name = "OPT_EQUIPMENT")
     private String optionalEquipment;
