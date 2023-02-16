@@ -1,22 +1,23 @@
 package com.factory.appraisal.vehiclesearchapp.persistence.dto;
+//@author:Rupesh khade
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AppraisalVehicleAcConditionDto extends TransactionEntityDto{
+public class AppraisalVehicleAcCondition extends TransactionEntity {
 
     private Long acConditionId;
-     
-    private Long appraisalStatusId;
+
+    private AppraisalTestDrivingStatus vehicleStatusId;
+
 
     @NotNull
     private Boolean coldAir;
